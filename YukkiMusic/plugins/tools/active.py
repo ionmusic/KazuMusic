@@ -1,19 +1,10 @@
-#
-# Copyright (C) 2021-2022 by TeamYukki@Github, < https://github.com/TeamYukki >.
-#
-# This file is part of < https://github.com/TeamYukki/YukkiMusicBot > project,
-# and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/TeamYukki/YukkiMusicBot/blob/master/LICENSE >
-#
-# All rights reserved.
-
 from pyrogram import filters
 from pyrogram.types import Message
 
 from strings import get_command
-from YukkiMusic import app
-from YukkiMusic.misc import SUDOERS
-from YukkiMusic.utils.database.memorydatabase import (
+from PrimeMusic import app
+from PrimeMusic.misc import SUDOERS
+from PrimeMusic.utils.database.db_memory import (
     get_active_chats, get_active_video_chats)
 
 # Commands
@@ -75,3 +66,11 @@ async def activevi_(_, message: Message):
             f"**Active Video Calls:-**\n\n{text}",
             disable_web_page_preview=True,
         )
+
+
+@app.on_message(filters.command("active", [".", "^", "-", "!", "/"]) & SUDOERS)
+async def activecilik(_, message: Message):
+    ms = len(await get_active_chats())
+    vd = len(await get_active_video_chats())
+    await app.send_message(message.chat.id, 
+        f"💽 Active Chats:\n\n• Music: {ms}\n• Video:{vd}")
